@@ -1,0 +1,100 @@
+{%extends 'base.html'%}
+{%block content%}
+{%load static%}
+
+
+{% if messages %}
+<ul class="messages">
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+        <div>
+    {% for message in messages %}
+   
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+
+    {% endfor %}
+
+</div>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+    </div>
+
+</ul>
+{% endif %}
+
+<div class="max-w-lg mx-auto flex flex-col items-center pt-20 px-4">
+    {%if user.profile_pic%}
+    <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile_pic.url }}" />
+    {%else%}
+    <img class="w-36 h-36 rounded-full object-cover mb-4" src="{%static 'avatar.jpg'%}" />
+    {%endif%}
+    <div class="text-center">
+        <h1>{{ user.username }}</h1>
+        <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+        {% if user.about %}
+        <div class="mt-8 hyphens-auto">{{ user.about|linebreaksbr }}</div>
+        {% endif %} 
+        
+    </div>
+</div>
+{%if request.user.is_doctor%}
+<h1>My education</h1>
+   <a href="{%url 'add_education'%}">add education</a><br>
+
+   {%for education in education%}
+   <hr>
+   <br>
+   {{education.degree}}
+   {{education.university}}
+   {{education.expertise_area}}
+   {{education.year}}
+   {{education.descript}}
+   <a style="color: brown;" href="{%url 'edit_education' education.id%}">edit</a>
+   <a style="color: brown;" href="{%url 'delete_education' education.id%}">delete</a>
+   <br>
+   <hr>
+   {%endfor%}
+{%else%}
+<div class="max-w-lg mx-auto flex flex-col items-center pt-20 px-4">
+    <h3>-----My Appoinments----</h3>
+    <table>
+        <tr>
+            <th>Id</th>
+          
+          <th>date</th>
+          <th>time</th>
+          <th >Name</th>
+          <th >status</th>
+
+          
+        </tr>
+        {%for appo in appoinment%}
+        <p>---------------------------------------------------</p>
+        <tr>
+            <h1>doctor name</h1>
+           <a style="color: blue;" href="{%url 'contact_patient' appo.patient.username appo.doctor.id %}">contact doctor '{{appo.doctor.first_name}}-{{appo.doctor.last_name}}'</a>
+             <h3>appoinment info</h3>
+          <td>{{appo.id}}</td>
+          <td>{{appo.day}}</td>
+          <td>{{appo.time}}</td>
+          <td>{{appo.full_name}}</td>
+          <td>{{appo.status}}</td>
+         
+           <td><a style="color:aliceblue;background-color: black;"  href="{%url 'edit-appoinment' appo.id%}">edit</a></td>
+           <td><a href="{%url 'done' appo.id%}">cancell</a></td>
+           
+        </tr>
+        
+        {%endfor%}
+
+    
+      </table>
+      <br>
+      <br>
+      <hr>
+</div>
+{%endif%}
+
+
+
+{%endblock content%}

@@ -1,0 +1,78 @@
+{%extends 'base.html'%}
+{%block content%}
+
+
+{% if messages %}
+<ul class="messages">
+    <div class="alert alert-success d-flex align-items-center" role="alert" style="background-color: rgb(116, 182, 240);">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+        <div>
+    {% for message in messages %}
+    <li style="color: black;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</div>
+<button style="background-color: rgb(116, 182, 240);" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</ul>
+{% endif %}
+ 
+
+<head>
+    <!-- {%include 'base/main.html'%} -->
+</head>
+<body>
+    
+    
+    <style>
+        .home-container {
+            display: grid;
+            grid-template-columns: 2fr 3fr 3fr;
+        }
+    </style>
+    <form action="" method="GET">
+    <div class="home-container">
+
+        <div>
+            <h1>Departements</h1>
+            <input style="background-color: rgb(247, 244, 241);" type="text" name="q" id="" placeholder="Search"> 
+            <a href="{%url 'dash'%}">All</a>
+           {%for depar in departement%}
+           <a href="{%url 'dash'%}?q={{depar.name}}" > <p>{{depar.id}}-{{depar.name}} </p> </a> 
+                <hr>
+              {%endfor%}
+              
+           
+        </div>
+
+        <div>
+            <h1>Doctor</h1>
+        {%for doc in doctor%}
+             <a href="{%url 'doctor_single' doc.username%}">  <p>-{{doc.id}} {{doc.first_name}} {{doc.last_name}} </p> </a> 
+                <p> </p>
+                <hr>
+                {%endfor%}
+            
+        </div>
+       
+        <div>
+            <form method="POST" action="">
+                {%csrf_token%}
+           <h1>My Patient</h1>
+           {%for appoinment in appoinment%}
+                <p> <a href="{%url 'patient' appoinment.patient.username%}">{{appoinment.id}}-{{appoinment.patient.first_name}} {{appoinment.patient.last_name}} {{appoinment.day}} {{appoinment.time}} {{appoinment.status}}</a></p>  
+                <a href="{%url 'done' appoinment.id%}">done</a>
+                <a style="color: blue;" href="{%url 'contact_patient' appoinment.patient.username appoinment.doctor.id %}">contact patient</a>
+                <hr>
+                {%endfor%}
+            </form>
+        </div>
+       
+    </div>
+</form>
+</body>
+
+
+
+</div>
+
+{%endblock content%}

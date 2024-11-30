@@ -1,0 +1,11 @@
+<p>{{patient.first_name}} {{patient.last_name}}</p> 
+<p>{{patient.age}}</p>
+<p>{{patient.phone}}</p>
+<p>{{patient.address}}</p>
+<p>{{patient.city}}</p>
+<p>{{patient.state}}</p>
+<p>{{patient.country}}</p>
+<p>{{patient.medical_history}}</p>
+{%if patient.patient_pic%}
+<img src="{{patient.patient_pic.url}}" alt="">
+{%endif%}
